@@ -1,0 +1,141 @@
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@500;600;700&display=swap");
+
+html {
+  background-color: #282828;
+}
+
+.PartSlot {
+  display: flex;
+  width: 310px;
+  position: relative;
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+
+.Text{
+  font-family: 'Raleway';
+  text-align: start;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.PartInfoHolder {
+  display: flex;
+  flex-direction: column;
+  height: 52px;
+  width: 195px;
+  margin-top: 9px;
+  margin-left: 10px;
+  justify-content: space-between;
+}
+
+.PartName {
+  height: 17px;
+  font-size: 17px;
+  line-height: 17px;
+  font-weight: 500;
+  color: #FFFFFF;
+}
+
+.ModelName, .PartPrice {
+  height: 13px;
+  line-height: 13px;
+  font-size: 13px;
+  text-align: left;
+  font-weight: 600;
+  color: #B5B5B5;
+}
+
+.IconMountLower {
+    width: 78px;
+    height: 70px;
+    background-color: #3E3E3E;
+    border-top-right-radius: 14px;
+    border-bottom-right-radius: 14px;
+}
+
+.IconMountUpper {
+    width: 58px;
+    height: 58px;
+    border-radius: 10px;
+    background-color: #D9D9D9;
+    position: relative;
+    left: 14px;
+    top: 6px;
+}
+
+.Icon {
+    width: 44px;
+    height: 44px;
+    margin: 7px;
+}
+
+.Icon.AnimateOnEnter {
+  animation: Up 80ms ease-out forwards;
+}
+
+@keyframes Up {
+  100% {
+    margin-left: 7px;
+    margin-top: 4px;
+  }
+}
+
+.Icon.AnimateOnLeave {
+animation: Down 80ms ease-out forwards;
+}
+
+@keyframes Down {
+  0% {
+    margin-left: 7px;
+    margin-top: 4px;
+  }
+  100% {
+    margin: 7px;
+  }
+}
+
+.Icon.AnimateOnMouseDown {
+  animation: AnimateOnMouseDown 60ms cubic-bezier(0, 0, 0.25, 1) forwards;
+}
+  
+@keyframes AnimateOnMouseDown {
+  0% {
+    margin-left: 7px;
+    margin-top: 4px;
+  }
+  100% {
+    margin: 7px;
+  }
+}
+
+.Icon.AnimateOnClickMobile {
+  animation: AnimateOnClickMobile 60ms cubic-bezier(0, 0, 0.25, 1) alternate 2;
+}
+  
+@keyframes AnimateOnClickMobile {
+  0% {
+    margin: 7px;
+  }
+  100% {
+    margin-left: 7px;
+    margin-top: 10px;
+  }
+}
+
+.ArrowMount {
+  height: 26px;
+  width: 26px;
+  background-color: #3E3E3E;
+  border-radius: 50%;
+  position: absolute;
+  right: 10px;
+  top: 17px;
+}
+
+.ArrowIcon {
+  height: 20px;
+  width: 20px;
+  margin: 3px;
+}

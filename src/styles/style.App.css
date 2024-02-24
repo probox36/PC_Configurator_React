@@ -1,0 +1,13 @@
+.ItemCardHolder::-webkit-scrollbar { 
+  display: none;
+}
+
+.PartSelectionCard {
+  top: 50px;
+  left: 50px;
+  /* transform: translateY(-50%); */
+}
+
+.App {
+  height: 100vh;
+}

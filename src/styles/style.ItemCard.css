@@ -1,0 +1,227 @@
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&display=swap");
+
+.Card {
+    width: 240px;
+    border-radius: 20px;
+    background-color: #282828;
+    border: 2px solid;
+    border-color: #7B7B7B;
+    overflow: hidden;
+    margin: 6px;
+    /* position: absolute; */
+    /* transform: translate(-50%, -50%); */
+    box-shadow: 0px 0px 6px 2px rgb(100, 100, 100);
+}
+
+.Mount {
+    height: 270px;
+    /* width: 100%; */
+    background-color: #3E3E3E;
+    border-bottom-left-radius: 18px;
+    border-bottom-right-radius: 18px;
+    padding-left: 8px;
+    padding-top: 8px;
+}
+
+.ImgHolderContent {
+    height: 224px;
+    width: 224px;
+}
+
+.ImgHolder {
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+}
+
+.Image {
+    display: block;
+    object-fit: cover;
+}
+
+.ItemCardOverlay {
+    background-color: rgba(0,0,0,0.7);
+    position: absolute;
+}
+
+.ItemCardOverlay.noShow {
+    display: none;
+}
+
+.ItemCardModelName {
+    margin-left: 7px;
+    color: #FFFFFF;
+    height: 50px;
+    width: 212px;
+    line-height: 50px;
+    font-weight: 500;
+    font-size: 20px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.ItemCardText {
+    font-family: 'Raleway';
+    /* text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden; */
+}
+
+.ButtonHolder {
+    display: flex;
+    flex-direction: row;
+    height: 38;
+    width: 220px;
+    margin: 10px;
+    /* gap: 10px; */
+}
+
+.RemoveButton {
+    height: 38px;
+    width: 65px;
+    background-color: #BD4D3F;
+    position: relative;
+    border-radius: 9px;
+    /* flex: 1; */
+    user-select: none;
+}
+
+.AddButton {
+    height: 38px;
+    width: 140px;
+    background-color: #D9D9D9;
+    color: #000000;
+    line-height: 38px;
+    font-weight: 650;
+    font-size: 18px;
+    text-align: center;
+    border-radius: 9px;
+    /* flex: 2; */
+    user-select: none;
+}
+
+.Overlay {
+
+}
+
+.AddButton.Selected {
+    background-color: #2F8D46;
+    color: #D9D9D9;
+}
+
+.AddButton.Minimized {
+    /* flex: 1; */
+    background-color: #2F8D46;
+    text-align: left;
+    width: 65px;
+    margin-left: 10px;
+}
+
+.AddButton.GreyedOutGreen {
+    /* background-color: #555555; */
+    /* color: #000000; */
+    animation: greyOutFromGreen 150ms cubic-bezier(0, 0, 0.25, 1) forwards;
+}
+
+.AddButton.GreyedOutWhite {
+    /* background-color: #555555; */
+    /* color: #000000; */
+    animation: greyOutFromWhite 150ms cubic-bezier(0, 0, 0.25, 1) forwards;
+}
+
+.SpecsButton {
+    height: 38px;
+    width: 80px;
+    margin-left: 10px;
+    background-color: #D9D9D9;
+    position: relative;
+    border-radius: 9px;
+    /* flex: 1; */
+    user-select: none;
+}
+
+.InfoIcon {
+    width: 26px;
+    height: 26px;
+    margin-top: 6px;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.RemoveButton.AnimateOnEnter,
+.AddButton.AnimateOnEnter,
+.SpecsButton.AnimateOnEnter {
+    animation: ItemCardButtonUp 120ms ease-out forwards;
+}
+
+.RemoveButton.AnimateOnLeave,
+.AddButton.AnimateOnLeave,
+.SpecsButton.AnimateOnLeave {
+  animation: ItemCardButtonDown 120ms ease-out forwards;
+}
+
+.RemoveButton.AnimateOnMouseDown,
+.AddButton.AnimateOnMouseDown,
+.SpecsButton.AnimateOnMouseDown {
+    animation: ItemCardButtonAnimateOnMouseDown 60ms cubic-bezier(0, 0, 0.25, 1) forwards;
+}
+
+.RemoveButton.AnimateOnClickMobile,
+.AddButton.AnimateOnClickMobile,
+.SpecsButton.AnimateOnClickMobile {
+    animation: ItemCardButtonAnimateOnClickMobile 80ms cubic-bezier(0, 0, 0.25, 1) alternate 2;
+}
+
+@keyframes greyOutFromGreen {
+    0% {
+        background-color: #2F8D46;
+    }
+    100% {
+      background-color: #555555;
+    }
+}
+
+@keyframes greyOutFromWhite {
+    0% {
+        background-color: #D9D9D9;
+    }
+    100% {
+      background-color: #555555;
+    }
+}
+  
+@keyframes ItemCardButtonAnimateOnMouseDown {
+    0% {
+      transform: scale(1.04);
+    }
+    100% {
+      transform: scale(0.985);
+    }
+}
+  
+@keyframes ItemCardButtonDown {
+    0% {
+        transform: scale(1.04);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+  
+@keyframes ItemCardButtonUp {
+    100% {
+      transform: scale(1.04);
+      box-shadow: 0px 0px 6px 2px rgb(100, 100, 100);
+    }
+}
+
+@keyframes ItemCardButtonAnimateOnClickMobile {
+    0% {
+      transform: scale(1);
+    }
+    100% {
+      transform: scale(0.94);
+    }
+}
