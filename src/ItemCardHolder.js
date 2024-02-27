@@ -1,5 +1,5 @@
 import './styles/style.ItemCardHolder.css';
-import Sad from './images/Sentiment_sad.svg';
+import sadSentiment from './images/Sentiment_sad.svg';
 
 function ItemCardHolder({itemCardList, itemCardHolderState}) {
 
@@ -12,7 +12,7 @@ function ItemCardHolder({itemCardList, itemCardHolderState}) {
       }
       case 'showStub':
         return <div className="catalogEmptyNotification">
-          <img src={Sad} className='sentimentSadImg' alt="Sentiment sad image" />
+          <img src={sadSentiment} className='sentimentSadImg' alt="Sentiment sad image" />
           <div className="catalogEmptyCaption">Здесь ничего нет</div>
           </div>;              
       default:

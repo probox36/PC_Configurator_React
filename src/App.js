@@ -146,16 +146,6 @@ function App() {
     });
   };
 
-  // const setSlotByClassName = (partClassNameArg, newSlot) => {
-  //   for (let i = 0; i < partSlotList.length; i++) {
-  //     if (partSlotList[i].props.partClassName === partClassNameArg) {
-  //       partSlotList[i] = newSlot;
-  //       break;
-  //     }
-  //   }
-  //   setPartSlotList(partSlotList);
-  // };
-
   const onClickItemCard = async (partClassName, chosenPart, addMode) => {
     // запрашивает список компонентов у бд
     const {status, json} = await fetchComponents(partClassName);
@@ -171,6 +161,7 @@ function App() {
       const noSlotsLeftFlag = computer.freeSlots[partClassName] < 1;
       const cardList = [];  
       console.log("itemCardList = " + itemCardList);
+      
       json.forEach((part) => {
         let cardSelectedFlag;
         let cardActiveFlag;
@@ -178,6 +169,7 @@ function App() {
         const existingPart = computer[partClassName];
         
         // узнает, выбрана ли карточка
+        // figures out if itemCard is chosen by user
         if (typeof existingPart != 'undefined') {
           if (Array.isArray(existingPart) && existingPart.length > 0) {
             cardSelectedFlag = existingPart.map((elem) => elem.id).includes(part.id);
@@ -189,19 +181,15 @@ function App() {
         multipleChoiceFlag = !isSingularFlag && cardSelectedFlag;
         
         // узнает, активна ли карточка
+        // figures out if itemCard is active
         if (addMode) {
             cardActiveFlag = cardSelectedFlag && isSingularFlag || !noSlotsLeftFlag;
         } else {
             cardActiveFlag = true;
         }
 
-        // console.log("Перебираю " + part.modelName);
-        // console.log("noSlotsLeftFlag = " + noSlotsLeftFlag);
-        // console.log("cardActiveFlag = " + cardActiveFlag);
-        // console.log("cardSelectedFlag = " + cardSelectedFlag);
-        // console.log("multipleChoiceFlag = " + multipleChoiceFlag);
-
         // создает пустой массив, в него ложит карточки с новыми параметрами
+        // creates an empty array and fills it with itemCards with new props
         cardList.push((<ItemCard 
           key={addMode ? 1 : 2 + partClassName.substring(0, 1) + part.id} 
           partObject={part} 
@@ -212,6 +200,7 @@ function App() {
           multipleChoice={multipleChoiceFlag}/>));
       });
       // заменяет itemCardList на этот массив
+      // replaces itemCardList with that array
       setItemcardList(cardList);
       calulateTotalCost();
       updatePartSlotByClassName(partClassName); 
@@ -221,18 +210,6 @@ function App() {
       alert("Нет подключения к серверу"); 
     }
   };
-
-  // const calulateTotalCost = () => {
-  //   let cost = 0;
-  //   Object.keys(computer).forEach((key) => {
-  //     console.log(computer[key].price);
-  //     if (typeof computer[key].price != 'undefined') {
-  //       console.log("Прибавляем к " + cost + " " + computer[key].price);
-  //       cost += computer[key].price;
-  //     }
-  //   });
-  //   setTotalCost(cost);
-  // }
 
   const calulateTotalCost = () => {
     let cost = 0;
@@ -270,5 +247,3 @@ function App() {
 }
 
 export default App;
-
-/* <div style={{display: "flex", msFlexDirection: "row", gap: "20px"}}></div> */

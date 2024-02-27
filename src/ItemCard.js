@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { isMobile } from 'react-device-detect';
 import './styles/style.ItemCard.css';
 import InfoIcon from './images/Info.svg';
@@ -6,13 +6,13 @@ import addIcon from './images/Add.svg';
 import removeIcon from './images/Remove.svg';
 import addIconBlack from './images/Add_black.svg';
 
-function ItemCard({partObject, selected, active, partClassName, onClickAdd, multipleChoice}) {
+function ItemCard({partObject, selected, active, partClassName, onClickAdd, multipleChoice, quantity = 0}) {
 
   const RemoveButton = useRef(null);
   const AddButton = useRef(null);
   const SpecsButton = useRef(null);
 
-  const [quantity, setQuantity] = useState(0);
+  // const [quantity, setQuantity] = useState(0);
 
   const modelName = partObject.modelName;
   const price = partObject.price;
@@ -80,7 +80,10 @@ function ItemCard({partObject, selected, active, partClassName, onClickAdd, mult
         
         <div className="Mount">
             <div className="ImgHolderContent ImgHolder">
-              <div className={"ImgHolderContent ItemCardOverlay"}> {"x" + quantity} </div>
+              { quantity > 0
+                ? <div className={"ImgHolderContent ItemCardOverlay"}> {"x" + quantity} </div>
+                : <></>
+              }
               <img className='ImgHolderContent Image' src={image} alt={"Фото " + modelName} />
             </div>
             <div className="ItemCardText ItemCardModelName">{partObject.modelName}</div>
@@ -98,6 +101,7 @@ function ItemCard({partObject, selected, active, partClassName, onClickAdd, mult
             </div>) : ""}
 
             <div 
+              // i'll get rid of this ternary atrocity in the future
               className={"ItemCardText AddButton" + 
                 (multipleChoice ? (active ? " Minimized" : " Minimized GreyedOutGreen") 
                 : (!active ? " GreyedOutWhite" : (selected ? " Selected" : "")))}
