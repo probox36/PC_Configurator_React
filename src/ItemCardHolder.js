@@ -1,7 +1,7 @@
 import './styles/style.ItemCardHolder.css';
 import sadSentiment from './images/Sentiment_sad.svg';
 
-function ItemCardHolder({itemCardList, itemCardHolderState}) {
+function ItemCardHolder({ itemCardList, itemCardHolderState }) {
 
   const renderSwitch = () => {
     switch (itemCardHolderState) {
@@ -12,17 +12,17 @@ function ItemCardHolder({itemCardList, itemCardHolderState}) {
       }
       case 'showStub':
         return <div className="catalogEmptyNotification">
-          <img src={sadSentiment} className='sentimentSadImg' alt="Sentiment sad image" />
+          <img src={sadSentiment} className='sentimentSadImg' alt="Sad Face" />
           <div className="catalogEmptyCaption">Здесь ничего нет</div>
-          </div>;              
+        </div>;
       default:
         return <></>;
     }
   }
-  
+
   return (
     <div className="ItemCardHolder">
-          { renderSwitch() }   
+      {renderSwitch()}
     </div>
   );
 }
