@@ -1,12 +1,24 @@
 import React, { useRef } from 'react';
 import { isMobile } from 'react-device-detect';
+import { Part } from './entities/Part';
 import './styles/style.ItemCard.css';
 import InfoIcon from './images/Info.svg';
 import addIcon from './images/Add.svg';
 import removeIcon from './images/Remove.svg';
 import addIconBlack from './images/Add_black.svg';
+import { PartClassName } from './entities/PartClassName';
 
-function ItemCard({ partObject, selected, active, partClassName, onClickAdd, multipleChoice, quantity = 0 }) {
+interface ItemCardProps {
+  partObject: Part;
+  selected: boolean;
+  active: boolean;
+  partClassName: PartClassName;
+  onClickAdd: (part: Part, addMode: boolean) => void;
+  multipleChoice: boolean;
+  quantity?: number;
+}
+
+function ItemCard({ partObject, selected, active, partClassName, onClickAdd, multipleChoice, quantity = 0 }: ItemCardProps) {
 
   const RemoveButton = useRef(null);
   const AddButton = useRef(null);
@@ -56,13 +68,13 @@ function ItemCard({ partObject, selected, active, partClassName, onClickAdd, mul
 
   const onRemoveBtnClick = (ref) => {
     onBtnClickAnim(ref);
-    onClickAdd(partClassName, partObject, false);
+    onClickAdd(partObject, false);
   }
 
   const onAddBtnClick = (ref) => {
     onBtnClickAnim(ref);
     if (!selected || multipleChoice) {
-      onClickAdd(partClassName, partObject, true);
+      onClickAdd(partObject, true);
     } else {
       onRemoveBtnClick(ref);
     }

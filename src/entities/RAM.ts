@@ -1,4 +1,5 @@
 import { Part } from "./Part";
+import { PartClassName } from "./PartClassName.ts";
 
 export class RAM implements Part {
     id: number;
@@ -6,7 +7,7 @@ export class RAM implements Part {
     price: number;
     description: string;
     imgAddress: string;
-    partClassName: string = "Оперативная память";
+    partClassName: PartClassName;
 
     constructor(id: number, modelName: string, price: number, description: string, imgAddress: string) {
         this.id = id;
@@ -14,5 +15,6 @@ export class RAM implements Part {
         this.price = price;
         this.description = description;
         this.imgAddress = imgAddress;
+        this.partClassName = PartClassName.RAM;
     }
 }

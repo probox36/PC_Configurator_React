@@ -1,4 +1,5 @@
 import { Part } from "./Part";
+import { PartClassName } from "./PartClassName.ts";
 
 export class CaseCooler implements Part {
     id: number;
@@ -6,7 +7,7 @@ export class CaseCooler implements Part {
     price: number;
     description: string;
     imgAddress: string;
-    partClassName: string = "caseCooler";
+    partClassName: PartClassName ;
     size: string;
 
     constructor(id: number, modelName: string, price: number, description: string, imgAddress: string, size: string) {
@@ -16,5 +17,6 @@ export class CaseCooler implements Part {
         this.description = description;
         this.imgAddress = imgAddress;
         this.size = size;
+        this.partClassName = PartClassName.CaseCooler;
     }
 }

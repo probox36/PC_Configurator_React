@@ -1,12 +1,22 @@
-import { useRef } from 'react';
+import React, { useRef } from 'react';
 import { isMobile } from 'react-device-detect';
+import { Part } from './entities/Part';
 import './styles/style.PartSlot.css';
 import chevron from './images/Chevron_right.svg';
+import { PartClassName } from './entities/PartClassName';
 
-function PartSlot({ iconAddress, partObject, partName, setOnClick, partClassName }) {
+interface PartSlotProps {
+  iconAddress: string;
+  partObject?: Part;
+  partClassName: PartClassName;
+  partName: string;
+  setOnClick: (partClassName: PartClassName) => void;
+};
 
-  const IconRef = useRef(null);
-  partObject = typeof partObject === 'undefined' ? {} : partObject;
+function PartSlot({ iconAddress, partObject, partClassName, partName, setOnClick }: PartSlotProps) {
+
+  const ref = useRef<HTMLImageElement>(null);
+  // partObject = typeof partObject === 'undefined' ? {} : partObject;
 
   const getGeneralName = (partObject) => {
 
@@ -57,52 +67,52 @@ function PartSlot({ iconAddress, partObject, partName, setOnClick, partClassName
 
   const mouseLeaveAnim = () => {
     if (!isMobile) {
-      IconRef.current.classList.remove("AnimateOnEnter");
-      IconRef.current.classList.add("AnimateOnLeave");
+      ref.current.classList.remove("AnimateOnEnter");
+      ref.current.classList.add("AnimateOnLeave");
     }
   };
 
   const mouseEnterAnim = () => {
     if (!isMobile) {
-      IconRef.current.classList.remove("AnimateOnLeave");
-      IconRef.current.classList.add("AnimateOnEnter");
+      ref.current.classList.remove("AnimateOnLeave");
+      ref.current.classList.add("AnimateOnEnter");
     }
   };
 
   const mouseDownAnim = () => {
     if (!isMobile) {
-      IconRef.current.classList.add("AnimateOnMouseDown");
-      IconRef.current.classList.remove("AnimateOnMouseEnter");
+      ref.current.classList.add("AnimateOnMouseDown");
+      ref.current.classList.remove("AnimateOnMouseEnter");
     }
   };
 
   const mouseUpAnim = () => {
     if (!isMobile) {
-      IconRef.current.classList.remove("AnimateOnMouseDown");
+      ref.current.classList.remove("AnimateOnMouseDown");
     }
   }
 
   const onClickHandler = async () => {
     if (isMobile) {
-      IconRef.current.classList.add("AnimateOnClickMobile");
+      ref.current.classList.add("AnimateOnClickMobile");
       setTimeout(() => {
-        IconRef.current.classList.remove("AnimateOnClickMobile");
+        ref.current.classList.remove("AnimateOnClickMobile");
       }, 120);
     }
 
-    setOnClick(partClassName, partObject);
+    setOnClick(partClassName);
   };
 
-  let isDefined;
+  let isPartObjectDefined;
 
-  if (typeof partObject != 'undefined') {
+  if (typeof partObject != 'undefined' && partObject != null) {
     if (Array.isArray(partObject)) {
-      isDefined = partObject.length > 0;
+      isPartObjectDefined = partObject.length > 0;
     } else {
-      isDefined = typeof partObject.id != 'undefined';
+      isPartObjectDefined = typeof partObject.id != 'undefined';
     }
   } else {
-    isDefined = false;
+    isPartObjectDefined = false;
   }
 
   return (
@@ -115,13 +125,13 @@ function PartSlot({ iconAddress, partObject, partName, setOnClick, partClassName
 
       <div className='IconMountLower'>
         <div className='IconMountUpper'>
-          <img src={iconAddress} className="Icon" ref={IconRef} alt="Part icon" />
+          <img src={iconAddress} className="Icon" ref={ref} alt="Part icon" />
         </div>
       </div>
       <div className="PartInfoHolder">
         <div className="Text PartName">{partName}</div>
-        <div className="Text ModelName">{isDefined ? getGeneralName(partObject) : "Не выбрано"}</div>
-        <div className="Text PartPrice">{isDefined ? getGeneralPrice(partObject) + "₽" : ""}</div>
+        <div className="Text ModelName">{isPartObjectDefined ? getGeneralName(partObject) : "Не выбрано"}</div>
+        <div className="Text PartPrice">{isPartObjectDefined ? getGeneralPrice(partObject) + "₽" : ""}</div>
       </div>
       <div className="ArrowMount">
         <img src={chevron} className="ArrowIcon" alt="" />
