@@ -17,7 +17,7 @@ interface PartSlotProps {
 };
 
 function PartSlot({ isActive, iconAddress, computer, partClassName, partName, setOnClick }: PartSlotProps) {
-
+  
   const partObject = computer[partClassName];
   let isPartObjectDefined;
 
@@ -50,9 +50,9 @@ function PartSlot({ isActive, iconAddress, computer, partClassName, partName, se
         </div>
       </div>
       <div className="PartInfoHolder">
-        <div className="Text PartName">{partName}</div>
-        <div className="Text ModelName">{isPartObjectDefined ? computer.getGeneralName(partClassName) : "Не выбрано"}</div>
-        <div className="Text PartPrice">{isPartObjectDefined ? computer.getCostByPartClass(partClassName) + "₽" : ""}</div>
+        <div className="PartSlotText PartName">{partName}</div>
+        <div className="PartSlotText ModelName">{isPartObjectDefined ? computer.getGeneralName(partClassName) : "Не выбрано"}</div>
+        <div className="PartSlotText PartPrice">{isPartObjectDefined ? computer.getCostByPartClass(partClassName) + "₽" : ""}</div>
       </div>
       <div className="ArrowMount">
         <img src={chevron} className="ArrowIcon" alt="" />

@@ -12,7 +12,7 @@
     position: relative;
 }
 
-.Text {
+.PartSelectionText {
     font-family: 'Raleway';
     text-overflow: ellipsis;
     white-space: nowrap;

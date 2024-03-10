@@ -1,20 +1,11 @@
-import { Part } from "./Part";
+import { Part } from "./Part.ts";
 import { PartClassName } from "./PartClassName.ts";
 
-export class CPU implements Part {
-    id: number;
-    modelName: string;
-    price: number;
-    description: string;
-    imgAddress: string;
+export class CPU extends Part {
     partClassName: PartClassName;
 
     constructor(id: number, modelName: string, price: number, description: string, imgAddress: string) {
-        this.id = id;
-        this.modelName = modelName;
-        this.price = price;
-        this.description = description;
-        this.imgAddress = imgAddress;
+        super(id, modelName, price, description, imgAddress);
         this.partClassName = PartClassName.CPU;
     }
 }

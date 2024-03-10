@@ -1,3 +1,4 @@
+import React from 'react';
 import './styles/style.ItemCardHolder.css';
 import sadSentiment from './images/Sentiment_sad.svg';
 

@@ -1,13 +1,14 @@
 import './styles/style.PartsSelection.css';
+import React from 'react';
 import withAnimation from './hoc/withAnimation.tsx';
 import { Button } from './Button.tsx';
 
 const PriceDisplay = ({ price }) => {
   return (
     <>
-      <div className="Text TotalCost">Стоимость:</div>
+      <div className="PartSelectionText TotalCost">Стоимость:</div>
       <div className="PriceMount">
-        <div className='Text Price'>{price + '₽'}</div>
+        <div className='PartSelectionText Price'>{price + '₽'}</div>
       </div>
     </>
   );
@@ -25,7 +26,7 @@ function PartSelection({ price, partSlotList }) {
       {partSlotList.map((slot) => (
         <>{slot}</>
       ))}
-      <Button className='OrderButton' content={'Сделать заказ'} btnName='OrderButton' btnWidth={290}/>
+      <Button content={'Сделать заказ'} btnName='OrderButton' btnWidth={290}/>
     </div>
   );
 }

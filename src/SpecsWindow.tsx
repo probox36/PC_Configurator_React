@@ -1,4 +1,5 @@
 import './styles/style.SpecsWindow.css';
+import React from 'react';
 import CloseIcon from './images/CloseWhite.svg';
 import Cooler from './images/Cooler.jpg';
 

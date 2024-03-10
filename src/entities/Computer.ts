@@ -5,7 +5,7 @@ import { RAM } from "./RAM.ts";
 import { PowerUnit } from "./powerUnit";
 import { PrimaryStorage } from "./PrimaryStorage.ts";
 import { Motherboard } from "./Motherboard.ts";
-import { Part } from "./Part";
+import { Part } from "./Part.ts";
 import { CaseCooler } from "./CaseCooler.ts";
 import { CoolingSystem } from "./CoolingSystem";
 import { Slot } from "./Slot.ts";
@@ -132,9 +132,6 @@ export class Computer {
 
     public removeFromArray(part: Part):void {
         
-        console.log(this.getCostByPartClass(PartClassName.CPU));
-        console.log(this.calculateTotalCost());
-        
         if (part instanceof RAM || part instanceof PrimaryStorage || part instanceof CaseCooler) {
             const array = this[part.partClassName];
             let indexToRemove = -1;
@@ -161,7 +158,7 @@ export class Computer {
         return price;
     }
 
-    public getCostByPartClass(partClass: PartClassName) {
+    public getCostByPartClass(partClass: PartClassName):number {
         const part: Part = this[partClass];
         let price = 0;
         if (part != undefined) {

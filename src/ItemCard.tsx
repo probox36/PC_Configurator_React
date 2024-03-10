@@ -16,10 +16,10 @@ interface ItemCardProps {
   active: boolean;
   onClickAdd: (part: Part, addMode: boolean) => void;
   multipleChoice: boolean;
-  quantity?: number;
+  quantity: number;
 }
 
-function ItemCard({ partObject, selected, active, onClickAdd, multipleChoice, quantity = 0 }: ItemCardProps) {
+function ItemCard({ partObject, selected, active, onClickAdd, multipleChoice, quantity }: ItemCardProps) {
 
   // const [quantity, setQuantity] = useState(0);
 

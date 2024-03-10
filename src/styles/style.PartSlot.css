@@ -12,7 +12,7 @@ html {
   cursor: pointer;
 }
 
-.Text{
+.PartSlotText {
   font-family: 'Raleway';
   text-align: start;
   text-overflow: ellipsis;
