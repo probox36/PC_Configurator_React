@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { isMobile } from 'react-device-detect';
 import { Part } from './entities/Part';
 import './styles/style.ItemCard.css';
@@ -6,23 +6,20 @@ import InfoIcon from './images/Info.svg';
 import addIcon from './images/Add.svg';
 import removeIcon from './images/Remove.svg';
 import addIconBlack from './images/Add_black.svg';
-import { PartClassName } from './entities/PartClassName';
+import { Button } from './Button.tsx';
+import { motion } from 'framer-motion';
+import { whileHoverAnimation, whileTapAnimation, whileTapMobileAnimation } from './Animations.tsx';
 
 interface ItemCardProps {
   partObject: Part;
   selected: boolean;
   active: boolean;
-  partClassName: PartClassName;
   onClickAdd: (part: Part, addMode: boolean) => void;
   multipleChoice: boolean;
   quantity?: number;
 }
 
-function ItemCard({ partObject, selected, active, partClassName, onClickAdd, multipleChoice, quantity = 0 }: ItemCardProps) {
-
-  const RemoveButton = useRef(null);
-  const AddButton = useRef(null);
-  const SpecsButton = useRef(null);
+function ItemCard({ partObject, selected, active, onClickAdd, multipleChoice, quantity = 0 }: ItemCardProps) {
 
   // const [quantity, setQuantity] = useState(0);
 
@@ -30,61 +27,57 @@ function ItemCard({ partObject, selected, active, partClassName, onClickAdd, mul
   const price = partObject.price;
   const image = partObject.imgAddress;
 
-  const mouseLeaveAnim = (ref) => {
-    if (!isMobile) {
-      ref.current.classList.remove("AnimateOnEnter");
-      ref.current.classList.add("AnimateOnLeave");
+  const addButtonStyle = () => {
+    if (multipleChoice) {
+      if (active) {
+        return " Minimized";
+      } else {
+        return " Minimized GreyedOutGreen";
+      }
+    } else {
+      if (!active) {
+        return " GreyedOutWhite";
+      } else if (selected) {
+        return " Selected";
+      } else {
+        return "";
+      }
     }
   };
 
-  const mouseEnterAnim = (ref) => {
-    if (!isMobile) {
-      ref.current.classList.remove("AnimateOnLeave");
-      ref.current.classList.add("AnimateOnEnter");
+  const addButtonContent = () => {
+    if (multipleChoice) {
+      return <img src={active ? addIcon : addIconBlack} className='InfoIcon' alt="Add icon" />;
+    } else if (selected) {
+      return "Выбрано";
+    } else {
+      return `+${price}₽`;
     }
   };
 
-  const mouseDownAnim = (ref) => {
-    if (!isMobile) {
-      ref.current.classList.add("AnimateOnMouseDown");
-      ref.current.classList.remove("AnimateOnMouseEnter");
+  const getButtonWhileClickAnim = () => {
+    if (active) {
+      if (isMobile) {
+        return whileTapMobileAnimation;
+      } else {
+        return whileTapAnimation;
+      }
+    } else {
+      return {};
     }
   };
 
-  const mouseUpAnim = (ref) => {
-    if (!isMobile) {
-      ref.current.classList.remove("AnimateOnMouseDown");
-    }
-  }
-
-  const onBtnClickAnim = (ref) => {
-    if (isMobile) {
-      ref.current.classList.add("AnimateOnClickMobile");
-      setTimeout(() => {
-        ref.current.classList.remove("AnimateOnClickMobile");
-      }, 200);
-    }
-  };
-
-  const onRemoveBtnClick = (ref) => {
-    onBtnClickAnim(ref);
-    onClickAdd(partObject, false);
-  }
-
-  const onAddBtnClick = (ref) => {
-    onBtnClickAnim(ref);
+  const onAddBtnClick = () => {
     if (!selected || multipleChoice) {
       onClickAdd(partObject, true);
     } else {
-      onRemoveBtnClick(ref);
+      onClickAdd(partObject, false);
     }
   };
 
-  const onSpecsBtnClick = (ref) => {
+  const onSpecsBtnClick = () => {
     alert("Это кнопочка характеристики");
   };
-
-  const blank = () => { }
 
   return (
 
@@ -102,43 +95,38 @@ function ItemCard({ partObject, selected, active, partClassName, onClickAdd, mul
       </div>
 
       <div className="ButtonHolder">
-        {multipleChoice ?
-          (<div className="RemoveButton" ref={RemoveButton}
-            onMouseLeave={() => { mouseLeaveAnim(RemoveButton); }}
-            onMouseEnter={() => { mouseEnterAnim(RemoveButton); }}
-            onMouseDown={() => { mouseDownAnim(RemoveButton); }}
-            onMouseUp={() => { mouseUpAnim(RemoveButton); }}
-            onClick={() => { onRemoveBtnClick(SpecsButton); }}>
-            <img src={removeIcon} className='InfoIcon' alt="" />
-          </div>) : ""}
 
-        <div
-          // i'll get rid of this ternary atrocity in the future
-          className={"ItemCardText AddButton" +
-            (multipleChoice ? (active ? " Minimized" : " Minimized GreyedOutGreen")
-              : (!active ? " GreyedOutWhite" : (selected ? " Selected" : "")))}
-          ref={AddButton}
-          onMouseLeave={active ? () => { mouseLeaveAnim(AddButton) } : blank}
-          onMouseEnter={active ? () => { mouseEnterAnim(AddButton) } : blank}
-          onMouseDown={active ? () => { mouseDownAnim(AddButton) } : blank}
-          onMouseUp={active ? () => { mouseUpAnim(AddButton) } : blank}
-          onClick={active ? () => { onAddBtnClick(AddButton) } : blank}
-        >
-          {multipleChoice ? (<img src={active ? addIcon : addIconBlack} className='InfoIcon' alt="" />)
-            : (selected ? "Выбрано" : ("+" + price + "₽"))}
-        </div>
+        { 
+          multipleChoice ?
+          (<motion.div 
+            className="RemoveButton" 
+            whileHover={ whileHoverAnimation }
+            whileTap={ isMobile ? whileTapMobileAnimation : whileTapAnimation }
+            onClick={ () => {onClickAdd(partObject, false)} }>
+              <img src={removeIcon} className='InfoIcon' alt="" />
+          </motion.div>) : ''
+        }
 
-        <div className="SpecsButton" ref={SpecsButton}
-          onMouseLeave={() => { mouseLeaveAnim(SpecsButton); }}
-          onMouseEnter={() => { mouseEnterAnim(SpecsButton); }}
-          onMouseDown={() => { mouseDownAnim(SpecsButton); }}
-          onMouseUp={() => { mouseUpAnim(SpecsButton); }}
-          onClick={() => { onSpecsBtnClick(SpecsButton); }}
+        <motion.div
+          className={"ItemCardText AddButton" + addButtonStyle()}
+          whileHover={ active ? whileHoverAnimation : {} }
+          whileTap={ getButtonWhileClickAnim() }
+          onClick={ active ? onAddBtnClick : () => {} }          
         >
-          <img src={InfoIcon} className='InfoIcon' alt="" />
-        </div>
+          { addButtonContent() }
+        </motion.div>
+
+        <Button 
+          content={<img src={InfoIcon} className='InfoIcon' alt="" />} 
+          callback={() => {onSpecsBtnClick()}} 
+          btnName='SpecsButton' 
+          btnWidth={80} 
+          btnHeight={38} 
+          btnBorderRadius={9}>
+        </Button>
 
       </div>
+
     </div>
   );
 }

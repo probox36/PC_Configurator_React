@@ -36,6 +36,7 @@ html {
   line-height: 17px;
   font-weight: 500;
   color: #FFFFFF;
+  user-select: none;
 }
 
 .ModelName, .PartPrice {
@@ -44,6 +45,10 @@ html {
   font-size: 13px;
   text-align: left;
   font-weight: 600;
+  color: #B5B5B5;
+}
+
+.PartPrice {
   color: #B5B5B5;
 }
 
@@ -65,63 +70,22 @@ html {
     top: 6px;
 }
 
+.IconMountUpper.Inactive {
+  background-color: #707070;
+}
+
+.PartName.Inactive {
+  color: #ababab;
+}
+
+.ModelName.Inactive {
+  color: #6a6a6a;
+}
+
 .Icon {
     width: 44px;
     height: 44px;
     margin: 7px;
-}
-
-.Icon.AnimateOnEnter {
-  animation: Up 80ms ease-out forwards;
-}
-
-@keyframes Up {
-  100% {
-    margin-left: 7px;
-    margin-top: 4px;
-  }
-}
-
-.Icon.AnimateOnLeave {
-animation: Down 80ms ease-out forwards;
-}
-
-@keyframes Down {
-  0% {
-    margin-left: 7px;
-    margin-top: 4px;
-  }
-  100% {
-    margin: 7px;
-  }
-}
-
-.Icon.AnimateOnMouseDown {
-  animation: AnimateOnMouseDown 60ms cubic-bezier(0, 0, 0.25, 1) forwards;
-}
-  
-@keyframes AnimateOnMouseDown {
-  0% {
-    margin-left: 7px;
-    margin-top: 4px;
-  }
-  100% {
-    margin: 7px;
-  }
-}
-
-.Icon.AnimateOnClickMobile {
-  animation: AnimateOnClickMobile 60ms cubic-bezier(0, 0, 0.25, 1) alternate 2;
-}
-  
-@keyframes AnimateOnClickMobile {
-  0% {
-    margin: 7px;
-  }
-  100% {
-    margin-left: 7px;
-    margin-top: 10px;
-  }
 }
 
 .ArrowMount {

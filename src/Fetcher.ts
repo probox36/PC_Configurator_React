@@ -4,7 +4,7 @@ import { CaseCooler } from "./entities/CaseCooler.ts";
 import { CoolingSystem } from "./entities/CoolingSystem.ts";
 import { GPU } from "./entities/GPU.ts";
 import { Motherboard } from "./entities/Motherboard.ts";
-import { Part } from "./entities/Part";
+import { Part } from "./entities/Part.ts";
 import { plainToClass } from 'class-transformer';
 import { PowerUnit } from "./entities/PowerUnit.ts";
 import { PrimaryStorage } from "./entities/PrimaryStorage.ts";

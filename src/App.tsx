@@ -19,9 +19,7 @@ import { PartClassName } from './entities/PartClassName.ts';
 import { Motherboard } from './entities/Motherboard.ts';
 import { Case } from './entities/Case.ts';
 
-// export let computer = {};
 export let computer = new Computer();
-// computer.freeSlots = { CPU: 3 };
 
 function App() {
 
@@ -32,7 +30,7 @@ function App() {
   const updatePartSlotByClassName = (partClassName) => {
     for (let i = 0; i < partSlotList.length; i++) {
       if (partSlotList[i].props.partClassName === partClassName) {
-        partSlotList[i] = cloneElement(partSlotList[i], { partObject: computer[partClassName] });
+        partSlotList[i] = cloneElement(partSlotList[i], { computer: computer });
       }
     }
 
@@ -74,7 +72,6 @@ function App() {
         cardList.push((<ItemCard
           key={'0' + part.id}
           partObject={part}
-          partClassName={part.partClassName}
           onClickAdd={onClickItemCard}
           selected={cardSelectedFlag}
           active={cardActiveFlag}
@@ -156,7 +153,6 @@ function App() {
         cardList.push((<ItemCard
           key={addMode ? 1 : 2 + part.partClassName.substring(0, 1) + part.id}
           partObject={part}
-          partClassName={part.partClassName}
           onClickAdd={onClickItemCard}
           selected={cardSelectedFlag}
           active={cardActiveFlag}
@@ -165,7 +161,7 @@ function App() {
       // заменяет itemCardList на этот массив
       // replaces itemCardList with that array
       setItemcardList(cardList);
-      calculateTotalCost();
+      setTotalCost(computer.calculateTotalCost());
       updatePartSlotByClassName(part.partClassName);
 
     } else {
@@ -173,29 +169,15 @@ function App() {
     }
   };
 
-  const calculateTotalCost = () => {
-    let cost = 0;
-    Object.keys(computer).forEach((field) => {
-      if (field != 'FreeSlots' && computer[field] != undefined) {
-        if (Array.isArray(computer[field])) {
-          computer[field].forEach((elem) => { cost += elem.price; })
-        } else {
-          cost += computer[field].price;
-        }
-      }
-    });
-    setTotalCost(cost);
-  }
-
   const [partSlotList, setPartSlotList] = useState(
     [
-      (<PartSlot key={1} iconAddress={MotherboardIcon} partClassName={PartClassName.Motherboard} setOnClick={onClickPartSlot} partName={"Материнская плата"}/>),
-      (<PartSlot key={2} iconAddress={CPUIcon} partClassName={PartClassName.CPU} setOnClick={onClickPartSlot} partName={"Процессор"}/>),
-      (<PartSlot key={3} iconAddress={GPUIcon} partClassName={PartClassName.GPU} setOnClick={onClickPartSlot} partName={"Видеокарта"}/>),
-      (<PartSlot key={4} iconAddress={RAMIcon} partClassName={PartClassName.RAM} setOnClick={onClickPartSlot} partName={"Оперативная память"}/>),
-      (<PartSlot key={5} iconAddress={PowerIcon} partClassName={PartClassName.PowerUnit} setOnClick={onClickPartSlot} partName={"Блок питания"}/>),
-      (<PartSlot key={6} iconAddress={HDDIcon} partClassName={PartClassName.PrimaryStorage} setOnClick={onClickPartSlot} partName={"Диск"}/>),
-      (<PartSlot key={7} iconAddress={FanIcon} partClassName={PartClassName.CoolingSystem} setOnClick={onClickPartSlot} partName={"Система охлаждения"}/>)
+      (<PartSlot key={1} iconAddress={MotherboardIcon} partClassName={PartClassName.Motherboard} computer={computer} setOnClick={onClickPartSlot} partName={"Материнская плата"}/>),
+      (<PartSlot key={2} iconAddress={CPUIcon} partClassName={PartClassName.CPU} computer={computer} setOnClick={onClickPartSlot} partName={"Процессор"}/>),
+      (<PartSlot key={3} iconAddress={GPUIcon} partClassName={PartClassName.GPU} computer={computer} setOnClick={onClickPartSlot} partName={"Видеокарта"}/>),
+      (<PartSlot key={4} iconAddress={RAMIcon} partClassName={PartClassName.RAM} computer={computer} setOnClick={onClickPartSlot} partName={"Оперативная память"}/>),
+      (<PartSlot key={5} iconAddress={PowerIcon} partClassName={PartClassName.PowerUnit} computer={computer} setOnClick={onClickPartSlot} partName={"Блок питания"}/>),
+      (<PartSlot key={6} iconAddress={HDDIcon} partClassName={PartClassName.PrimaryStorage} computer={computer} setOnClick={onClickPartSlot} partName={"Диск"}/>),
+      (<PartSlot key={7} iconAddress={FanIcon} partClassName={PartClassName.CoolingSystem} computer={computer} setOnClick={onClickPartSlot} partName={"Система охлаждения"}/>)
     ]
   );
 
@@ -203,8 +185,9 @@ function App() {
     <div className="App">
       {/* {<SpecsWindow/>} */}
       <PartSelection price={totalCost} partSlotList={partSlotList} />
-      <ItemCardHolder itemCardList={itemCardList} itemCardHolderState={itemCardHolderState} />
+      <ItemCardHolder itemCardList={itemCardList} itemCardHolderState={itemCardHolderState} /> 
     </div>
+    
   );
 
 }

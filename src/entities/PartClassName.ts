@@ -5,7 +5,7 @@ export enum PartClassName {
     CPU = 'CPU', 
     GPU = 'GPU', 
     Motherboard = 'Motherboard',  
-    PowerUnit = 'PoerUnit', 
+    PowerUnit = 'PowerUnit', 
     PrimaryStorage = 'PrimaryStorage', 
     RAM = 'RAM'
 }

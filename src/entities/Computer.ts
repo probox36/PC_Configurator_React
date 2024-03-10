@@ -9,6 +9,7 @@ import { Part } from "./Part";
 import { CaseCooler } from "./CaseCooler.ts";
 import { CoolingSystem } from "./CoolingSystem";
 import { Slot } from "./Slot.ts";
+import { PartClassName } from "./PartClassName.ts";
 
 export class Computer {
 
@@ -94,19 +95,16 @@ export class Computer {
 
         if (part instanceof RAM) {
             this.FreeSlots['RAM']++;
-            var index = this.RAM.indexOf(part as RAM);
-            this.RAM.splice(index, 1);
+            this.removeFromArray(part as RAM);
         } else if (part instanceof PrimaryStorage) {
             var disk = (part as PrimaryStorage);
             if (disk.diskSocket == 'sata' && disk.diskType == 'hdd') {
                 this.FreeSlots[Slot.HDDMounts]++;
             }
             this.FreeSlots[disk.diskSocket]++;
-            var index = this.PrimaryStorage.indexOf(disk);
-            this.PrimaryStorage.splice(index, 1);
+            this.removeFromArray(disk);
         } else if (part instanceof CaseCooler) {
-            var index = this.CaseCoolers.indexOf(part as CaseCooler);
-            this.CaseCoolers.splice(index, 1);
+            this.removeFromArray(part as CaseCooler);
         } else {
             this[part.partClassName] = null;
         }
@@ -131,5 +129,85 @@ export class Computer {
         }
         
     }
+
+    public removeFromArray(part: Part):void {
+        
+        console.log(this.getCostByPartClass(PartClassName.CPU));
+        console.log(this.calculateTotalCost());
+        
+        if (part instanceof RAM || part instanceof PrimaryStorage || part instanceof CaseCooler) {
+            const array = this[part.partClassName];
+            let indexToRemove = -1;
+            for (let i = 0; i < array.length; i++) {
+                if (array[i].id == part.id) {
+                    indexToRemove = i;
+                    break;
+                }
+            }
+            if (indexToRemove != -1) {
+                array.splice(indexToRemove, 1);
+            } else {
+                throw Error(`Can't remove object of type ${part.partClassName} with id = ${part.id}: no such object`);
+            }
+        }
+
+    }
+
+    public calculateTotalCost():number {
+        let price = 0;
+        Object.values(PartClassName).forEach((partClass) => {
+            price += this.getCostByPartClass(partClass);
+        });
+        return price;
+    }
+
+    public getCostByPartClass(partClass: PartClassName) {
+        const part: Part = this[partClass];
+        let price = 0;
+        if (part != undefined) {
+            if (Array.isArray(part)) {
+                part.forEach((element: Part) => {
+                    price += element.price;
+                });
+            } else {
+                price = part.price;
+            }
+        }
+        return price;
+    }
+
+    public getGeneralName(partClass: PartClassName) {
+
+        const part = this[partClass];
+
+        if (!Array.isArray(part)) { return part.modelName; }
+    
+        let partNames = {};
+        let generalName = "";
+    
+        part.forEach(part => {
+          if (partNames[part.modelName] === undefined) {
+            partNames[part.modelName] = 1;
+          } else {
+            partNames[part.modelName] += 1;
+          }
+        });
+    
+        let keys = Object.keys(partNames);
+    
+        for (let i = 0; i < keys.length; i++) {
+          let key = Object.keys(partNames)[i];
+          if (partNames[key] === 1) {
+            generalName += key;
+          } else {
+            generalName = generalName + key + " x" + partNames[key];
+          }
+          if (i !== keys.length - 1) {
+            generalName += ", "
+          }
+        }
+    
+        return generalName;
+      };
 
 }

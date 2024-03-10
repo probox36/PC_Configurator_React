@@ -8,8 +8,6 @@
     border-color: #7B7B7B;
     overflow: hidden;
     margin: 6px;
-    /* position: absolute; */
-    /* transform: translate(-50%, -50%); */
     box-shadow: 0px 0px 6px 2px rgb(100, 100, 100);
 }
 
@@ -63,9 +61,6 @@
 
 .ItemCardText {
     font-family: 'Raleway';
-    /* text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden; */
 }
 
 .ButtonHolder {
@@ -74,7 +69,6 @@
     height: 38;
     width: 220px;
     margin: 10px;
-    /* gap: 10px; */
 }
 
 .RemoveButton {
@@ -83,7 +77,7 @@
     background-color: #BD4D3F;
     position: relative;
     border-radius: 9px;
-    /* flex: 1; */
+    text-align: center;
     user-select: none;
 }
 
@@ -97,7 +91,6 @@
     font-size: 18px;
     text-align: center;
     border-radius: 9px;
-    /* flex: 2; */
     user-select: none;
 }
 
@@ -113,31 +106,23 @@
 .AddButton.Minimized {
     /* flex: 1; */
     background-color: #2F8D46;
-    text-align: left;
     width: 65px;
     margin-left: 10px;
 }
 
 .AddButton.GreyedOutGreen {
-    /* background-color: #555555; */
-    /* color: #000000; */
     animation: greyOutFromGreen 150ms cubic-bezier(0, 0, 0.25, 1) forwards;
 }
 
 .AddButton.GreyedOutWhite {
-    /* background-color: #555555; */
-    /* color: #000000; */
     animation: greyOutFromWhite 150ms cubic-bezier(0, 0, 0.25, 1) forwards;
 }
 
-.SpecsButton {
-    height: 38px;
-    width: 80px;
+.Button.SpecsButton {
     margin-left: 10px;
     background-color: #D9D9D9;
     position: relative;
     border-radius: 9px;
-    /* flex: 1; */
     user-select: none;
 }
 
@@ -145,33 +130,6 @@
     width: 26px;
     height: 26px;
     margin-top: 6px;
-    position: relative;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-.RemoveButton.AnimateOnEnter,
-.AddButton.AnimateOnEnter,
-.SpecsButton.AnimateOnEnter {
-    animation: ItemCardButtonUp 120ms ease-out forwards;
-}
-
-.RemoveButton.AnimateOnLeave,
-.AddButton.AnimateOnLeave,
-.SpecsButton.AnimateOnLeave {
-  animation: ItemCardButtonDown 120ms ease-out forwards;
-}
-
-.RemoveButton.AnimateOnMouseDown,
-.AddButton.AnimateOnMouseDown,
-.SpecsButton.AnimateOnMouseDown {
-    animation: ItemCardButtonAnimateOnMouseDown 60ms cubic-bezier(0, 0, 0.25, 1) forwards;
-}
-
-.RemoveButton.AnimateOnClickMobile,
-.AddButton.AnimateOnClickMobile,
-.SpecsButton.AnimateOnClickMobile {
-    animation: ItemCardButtonAnimateOnClickMobile 80ms cubic-bezier(0, 0, 0.25, 1) alternate 2;
 }
 
 @keyframes greyOutFromGreen {
@@ -189,39 +147,5 @@
     }
     100% {
       background-color: #555555;
-    }
-}
-  
-@keyframes ItemCardButtonAnimateOnMouseDown {
-    0% {
-      transform: scale(1.04);
-    }
-    100% {
-      transform: scale(0.985);
-    }
-}
-  
-@keyframes ItemCardButtonDown {
-    0% {
-        transform: scale(1.04);
-    }
-    100% {
-        transform: scale(1);
-    }
-}
-  
-@keyframes ItemCardButtonUp {
-    100% {
-      transform: scale(1.04);
-      box-shadow: 0px 0px 6px 2px rgb(100, 100, 100);
-    }
-}
-
-@keyframes ItemCardButtonAnimateOnClickMobile {
-    0% {
-      transform: scale(1);
-    }
-    100% {
-      transform: scale(0.94);
     }
 }

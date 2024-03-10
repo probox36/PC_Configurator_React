@@ -1,5 +1,6 @@
 import './styles/style.PartsSelection.css';
 import withAnimation from './hoc/withAnimation.tsx';
+import { Button } from './Button.tsx';
 
 const PriceDisplay = ({ price }) => {
   return (
@@ -24,7 +25,7 @@ function PartSelection({ price, partSlotList }) {
       {partSlotList.map((slot) => (
         <>{slot}</>
       ))}
-      <OrderButton />
+      <Button className='OrderButton' content={'Сделать заказ'} btnName='OrderButton' btnWidth={290}/>
     </div>
   );
 }
