@@ -19,21 +19,7 @@ function App() {
   const [totalCost, setTotalCost] = useState(0);
   const [itemCardHolderState, setItemCardHolderState] = useState('showNothing');
   const [itemCardList, setItemcardList] = useState<Array<ReactElement>>([]);
-  
-  const countSimilarParts = (part: Part, existingPart: Part | Array<Part>): number => {
-    let count = 0;
-    if (Array.isArray(existingPart)) {
-      existingPart.forEach((elem) => {
-        if (elem.isEqual(part)) {
-          count++;
-        }
-      });
-    } else {
-      existingPart = existingPart as Part;
-      if (existingPart.isEqual(part)) { count++; }
-    }
-    return count;
-  };
+  let areCaseAndBoardDefined = false;
 
   const displayItemCards = (parts: Array<Part>) => {
     const cardList: ReactElement[] = [];
@@ -45,7 +31,7 @@ function App() {
       let quantity = 0;
 
       if (existingPart != undefined) {
-        quantity = countSimilarParts(part, existingPart);
+        quantity = computer.countSimilarParts(part);
         cardSelectedFlag = quantity > 0;
       } 
 
@@ -87,43 +73,65 @@ function App() {
   const onClickItemCard = async (part: Part, addMode: boolean) => {
     const reply = await fetchComponents(part.partClassName);
     const parts = reply.castTo(part.partClassName);
-    if (reply.status) { 
+    if (reply.status) {
 
-      if (addMode) {
+      if (areCaseAndBoardDefined) {
         
-        // Костыль, нуждается в доработке
-        if (part instanceof Motherboard) {
-          let computerCase = new Case(45, "InWin AssPlus 14K", 4587, "Охуенный корпус", '', 2, 
-          new Map([
-            ['140', 2],
-            ['80', 4],
-          ]));
-          computer = new Computer(computerCase, part);
+        if (part instanceof Motherboard || part instanceof Case) {
+          if (computer.wasSomethingAdded()) {
+            alert('Вы собираетесь заменить корпус или матплату, конфигурацию придется начать сначала');
+          }
+          if (addMode) {
+            computer.addPart(part);
+            computer = new Computer(computer.Case, computer.Motherboard);
+          } else {
+            computer.removePart(part);
+            if (part.partClassName == PartClassName.Motherboard) {
+              part = computer.Case;
+            } else {
+              part = computer.Motherboard;
+            }
+            computer = new Computer();
+            computer.addPart(part);
+            areCaseAndBoardDefined = false;
+          }
         } else {
-          computer.addPart(part);
+          if (addMode) {
+            computer.addPart(part);
+          } else {
+            computer.removePart(part);
+          }
         }
 
       } else {
-        
-        if (part instanceof Motherboard || part instanceof Case) {
-          // на этом этапе должен появляться modal
-          computer = new Computer(); 
-        } else {
-          computer.removePart(part);
-        }
 
+        if (part instanceof Motherboard || part instanceof Case) {
+          if (addMode) {
+            computer.addPart(part);
+            if (computer.Case != undefined && computer.Motherboard != undefined) {
+              computer = new Computer(computer.Case, computer.Motherboard);
+              areCaseAndBoardDefined = true;
+            }
+          } else {
+            computer.removePart(part);
+          }
+        } else {
+          throw new Error('Нельзя добавлять компоненты в компьютер без корпуса и матплаты');
+        }
       }
 
       displayItemCards(parts);
       setTotalCost(computer.calculateTotalCost());
-      setPartSlotList(predefinedPartSlotList(computer, onClickPartSlot))
+      setPartSlotList(predefinedPartSlotList(areCaseAndBoardDefined, computer, onClickPartSlot))
 
     } else {
       alert("Нет подключения к серверу");
     }
   };
 
-  const [partSlotList, setPartSlotList] = useState(predefinedPartSlotList(computer, onClickPartSlot));
+  const [partSlotList, setPartSlotList] = useState(
+    predefinedPartSlotList(areCaseAndBoardDefined, computer, onClickPartSlot)
+  );
 
   return (
     <div className="App">

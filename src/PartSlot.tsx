@@ -37,8 +37,8 @@ function PartSlot({ isActive, iconAddress, computer, partClassName, partName, se
       className="PartSlot"
       onClick={ isActive ? () => { setOnClick(partClassName) } : undefined }
       initial = 'tap'
-      whileHover='hover'
-      whileTap= {isMobile ? 'tapMobile' : 'tap'}
+      whileHover={isActive ? 'hover' : undefined}
+      whileTap= {isActive ? (isMobile ? 'tapMobile' : 'tap') : undefined}
       style={ inactivePartSlotStyle }
     >
 
@@ -46,11 +46,11 @@ function PartSlot({ isActive, iconAddress, computer, partClassName, partName, se
 
         <div className='IconMountUpper' style = { inactiveIconHolderStyle  }>
 
-          <motion.img 
+          <motion.img
             src={iconAddress} 
             className="Icon"
             alt="Part icon"
-            variants={ isActive ? partSlotAnimationVariants : undefined }
+            variants={ partSlotAnimationVariants }
             transition={{
               duration: 0.08,
               ease: easeOut
@@ -68,7 +68,7 @@ function PartSlot({ isActive, iconAddress, computer, partClassName, partName, se
         </div>
 
         <div className="PartSlotText ModelName" style={ inactiveTextStyle }>
-          {isPartObjectDefined ? computer.getGeneralName(partClassName) : "Не выбрано"}
+          {isPartObjectDefined ? computer.getGeneralNameOfPartClass(partClassName) : "Не выбрано"}
         </div>
 
         <div className="PartSlotText PartPrice" style={ inactiveTextStyle }>

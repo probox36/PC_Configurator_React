@@ -86,9 +86,6 @@ export class Computer {
         } else {
             this[part.partClassName] = part;
         }
-        // } else if (part !instanceof Case || part !instanceof Motherboard) {
-        //     this[part.partClassName] = part;
-        // }
     }
 
     public removePart(part: Part): void {
@@ -173,7 +170,7 @@ export class Computer {
         return price;
     }
 
-    public getGeneralName(partClass: PartClassName) {
+    public getGeneralNameOfPartClass(partClass: PartClassName) {
 
         const part = this[partClass];
 
@@ -206,5 +203,40 @@ export class Computer {
     
         return generalName;
       };
+
+    public countSimilarParts(part: Part): number {
+        let existingPart = this[part.partClassName];
+        let count = 0;
+        if (Array.isArray(existingPart)) {
+          existingPart.forEach((elem) => {
+            if (elem.isEqual(part)) {
+              count++;
+            }
+          });
+        } else {
+          existingPart = existingPart as Part;
+          if (existingPart.isEqual(part)) { count++; }
+        }
+        return count;
+    };
+
+    public isSlotEmpty(partClass: PartClassName): boolean {
+        const existingPart = this[partClass];
+        return !(existingPart instanceof Array && existingPart.length > 0
+        || existingPart instanceof Map && existingPart.size > 0
+        || !(existingPart instanceof Map) && !(existingPart !instanceof Array) && existingPart != undefined);
+    }
+
+    public wasSomethingAdded(): boolean {
+        let result = false;
+        Object.values(PartClassName).forEach((partClass) => {
+            if (partClass != PartClassName.Motherboard 
+                && partClass != PartClassName.Case 
+                && !this.isSlotEmpty(partClass)) {
+                    result = true;
+            }
+        });
+        return result;
+    }
 
 }
