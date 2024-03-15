@@ -1,0 +1,41 @@
+.ModalWindowOverlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+    z-index: 1;
+}
+
+.ModalWindow {
+    position: relative;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 470px;
+    border-radius: 20px;
+    background-color: #282828;
+    border: 2px solid;
+    border-color: #7B7B7B;
+    overflow: hidden;
+    z-index: 2;
+    padding: 25px 40px 20px 40px;
+}
+
+.ModalText {
+    margin-bottom: 25px;
+    color: #FFFFFF;
+    text-align: left;
+    font-size: 18px;
+    font-weight: 400;
+    font-family: 'Raleway';
+    line-height: 25px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.ModalButtonHolder {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    gap: 10px;
+}

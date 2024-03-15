@@ -1,6 +1,5 @@
 import './styles/style.PartsSelection.css';
 import React from 'react';
-import withAnimation from './hoc/withAnimation.tsx';
 import { Button } from './Button.tsx';
 
 const PriceDisplay = ({ price }) => {

@@ -9,6 +9,8 @@ import HDDIcon from './images/HDD.svg';
 import FanIcon from './images/Fan.svg';
 import { PartClassName } from "./entities/PartClassName.ts";
 import { Computer } from "./entities/Computer.ts";
+import Modal from "./Modal.tsx";
+import Button from "./Button.tsx";
 
 export const predefinedPartSlotList = (isActive: boolean, computer: Computer, onClickPartSlot: (partClassName: PartClassName) => void): Array<ReactElement> => {
     return [
@@ -21,4 +23,25 @@ export const predefinedPartSlotList = (isActive: boolean, computer: Computer, on
         (<PartSlot key={7} isActive={isActive} iconAddress={HDDIcon} partClassName={PartClassName.PrimaryStorage} computer={computer} setOnClick={onClickPartSlot} partName={"Диск"}/>),
         (<PartSlot key={8} isActive={isActive} iconAddress={FanIcon} partClassName={PartClassName.CaseCooler} computer={computer} setOnClick={onClickPartSlot} partName={"Система охлаждения"}/>)
       ]
+};
+
+export const predefinedModalPromise = (setModal: (ReactElement) => void): Promise<boolean> => {
+  return new Promise<boolean>((resolve) => {
+    const okCallback = () => { resolve(true); }
+    const cancelCallback = () => { resolve(false); }
+    setModal(predefinedPartSelectionModal(cancelCallback, okCallback));
+  });
+};
+
+export const predefinedPartSelectionModal = (cancelCallback?: () => void, okCallback?: () => void) => {
+  const buttons = [
+    <Button content={'Отмена'} callback={cancelCallback} btnWidth={150}></Button>,
+    <Button content={'Продолжить'} callback={okCallback} btnWidth={150}></Button>
+  ];
+  return (
+    <Modal 
+      text="Вы собираетесь заменить корпус или матплату, конфигурацию придется начать сначала" 
+      buttons={buttons}>
+    </Modal>
+  )
 };

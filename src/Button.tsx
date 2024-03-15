@@ -2,7 +2,6 @@ import React from "react";
 import { ReactElement } from "react";
 import './styles/style.Button.css';
 import { motion } from "framer-motion";
-import withAnimation from "./hoc/withAnimation.tsx";
 import { isMobile } from 'react-device-detect';
 import { whileTapAnimation, whileTapMobileAnimation, whileHoverAnimation } from "./Animations.tsx";
 
@@ -40,4 +39,4 @@ export function Button({ content, btnName, callback, btnWidth, btnHeight, btnBor
     );
 }
 
-export default withAnimation(Button);
+export default Button;

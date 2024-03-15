@@ -2,8 +2,14 @@ import './styles/style.SpecsWindow.css';
 import React from 'react';
 import CloseIcon from './images/CloseWhite.svg';
 import Cooler from './images/Cooler.jpg';
+import { Part } from './entities/Part';
 
-function SpecsWindow({partObject}) {
+interface SpecsWindowProps {
+  partObject?: Part;
+  callback?: (part: Part, addMode: boolean) => void;
+}
+
+function SpecsWindow({partObject, callback}: SpecsWindowProps) {
     
   return (
     

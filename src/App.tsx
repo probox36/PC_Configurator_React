@@ -1,16 +1,17 @@
-import { useState, cloneElement, ReactElement } from 'react';
+import React from 'react';
+import { useState, ReactElement } from 'react';
 import './styles/style.App.css';
 import PartSelection from './PartsSelection.tsx';
 import ItemCard from './ItemCard.tsx';
 import ItemCardHolder from './ItemCardHolder.tsx';
+// import SpecsWindow from './SpecsWindow.tsx'
 import { Computer } from './entities/Computer.ts';
 import { fetchComponents } from "./Fetcher.ts";
 import { Part } from './entities/Part.ts';
-import React from 'react';
 import { PartClassName } from './entities/PartClassName.ts';
 import { Motherboard } from './entities/Motherboard.ts';
 import { Case } from './entities/Case.ts';
-import { predefinedPartSlotList } from './PredefinedValues.tsx';
+import { predefinedPartSlotList, predefinedModalPromise } from './PredefinedValues.tsx';
 
 export let computer = new Computer();
 
@@ -19,7 +20,14 @@ function App() {
   const [totalCost, setTotalCost] = useState(0);
   const [itemCardHolderState, setItemCardHolderState] = useState('showNothing');
   const [itemCardList, setItemcardList] = useState<Array<ReactElement>>([]);
+  const [modal, setModal] = useState<ReactElement | undefined>(undefined);
   let areCaseAndBoardDefined = false;
+
+  const displayPartSelectionModal = async () => {
+    const result = await predefinedModalPromise(setModal);
+    setModal(undefined);
+    return result;
+  };
 
   const displayItemCards = (parts: Array<Part>) => {
     const cardList: ReactElement[] = [];
@@ -79,7 +87,9 @@ function App() {
         
         if (part instanceof Motherboard || part instanceof Case) {
           if (computer.wasSomethingAdded()) {
-            alert('Вы собираетесь заменить корпус или матплату, конфигурацию придется начать сначала');
+            if (!await displayPartSelectionModal()) {
+              return;
+            }
           }
           if (addMode) {
             computer.addPart(part);
@@ -135,7 +145,7 @@ function App() {
 
   return (
     <div className="App">
-      {/* {<SpecsWindow/>} */}
+      { modal }
       <PartSelection price={totalCost} partSlotList={partSlotList} />
       <ItemCardHolder itemCardList={itemCardList} itemCardHolderState={itemCardHolderState} /> 
     </div>
