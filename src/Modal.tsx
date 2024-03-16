@@ -13,8 +13,8 @@ function Modal({text, buttons}: PartSlotProps) {
     <div className='ModalWindowOverlay'>
         <motion.div 
         className="ModalWindow"
-        animate = {{ opacity: 1 }}
-        initial = {{ opacity: 0.2 }}
+        animate = {{ opacity: 1, scale: 1 }}
+        initial = {{ opacity: 0.2, scale: 0.85 }}
         >
             <div className="ModalText">
                 { text }

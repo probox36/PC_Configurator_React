@@ -8,9 +8,8 @@
 
 .ModalWindow {
     position: relative;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    margin: auto;
+    top: calc(50% - 83px);
     width: 470px;
     border-radius: 20px;
     background-color: #282828;

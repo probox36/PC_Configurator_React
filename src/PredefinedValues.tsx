@@ -27,8 +27,8 @@ export const predefinedPartSlotList = (isActive: boolean, computer: Computer, on
 
 export const predefinedModalPromise = (setModal: (ReactElement) => void): Promise<boolean> => {
   return new Promise<boolean>((resolve) => {
-    const okCallback = () => { resolve(true); }
-    const cancelCallback = () => { resolve(false); }
+    const okCallback = () => { setTimeout(() => { resolve(true); }, 80); }
+    const cancelCallback = () => { setTimeout(() => { resolve(false); }, 80); }
     setModal(predefinedPartSelectionModal(cancelCallback, okCallback));
   });
 };

@@ -8,9 +8,8 @@
 
 .window {
     position: relative;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    margin: auto;
+    margin-top: 3%;
     width: 70%;
     height: 88%;
     border-radius: 20px;
@@ -30,19 +29,9 @@
 }
 
 .windowAddButton {
-    width: 310px;
-    height: 43px;
-    line-height: 45px;
     bottom: 20px;
     left: 25px;
-    background-color: #D9D9D9;
-    border-radius: 14px;
     position: absolute;
-    text-align: center;
-    font-weight: 620;
-    font-size: 18px;
-    -webkit-user-select: none;
-    user-select: none;
 }
 
 .title {
@@ -63,16 +52,15 @@
 }
 
 .productNameHolder {
-    margin-top: 4px;
+    margin-top: 14px;
+    width: 320px;
     display: flex;
     flex-direction: row;
     gap: 5px;
-    height: 76px;
 }
 
 .bean {
-    margin-top: 10px;
-    height: 56px;
+    margin-top: 12px;
     width: 6px;
     border-radius: 3px;
     /* border-top-left-radius: 4px;
@@ -80,15 +68,23 @@
     background-color: #D9D9D9;
 }
 
-.windowProductName {
-    color: #FFFFFF;
+.innerProductNameHolder {
     margin-left: 10px;
     width: 300px;
-    height: 76px;
-    line-height: 76px;
+}
+
+.windowProductName {
+    color: #FFFFFF;
+    line-height: 50px;
     text-align: left;
     font-size: 25px;
     font-weight: 500;
+}
+
+.windowPrice {
+    color: #FFFFFF;
+    font-size: 18px;
+    font-weight: 400;
 }
 
 .closeButton {
@@ -100,6 +96,7 @@
     position: absolute;
     right: 0px;
     top: 0px;
+    cursor: pointer;
 }
 
 .cross {

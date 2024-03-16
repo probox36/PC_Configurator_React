@@ -15,11 +15,12 @@ interface ItemCardProps {
   selected: boolean;
   active: boolean;
   onClickAdd: (part: Part, addMode: boolean) => void;
+  onSpecsBtnClick: (part: Part) => void;
   multipleChoice: boolean;
   quantity: number;
 }
 
-function ItemCard({ partObject, selected, active, onClickAdd, multipleChoice, quantity }: ItemCardProps) {
+function ItemCard({ partObject, selected, active, onClickAdd, onSpecsBtnClick, multipleChoice, quantity }: ItemCardProps) {
 
   // const [quantity, setQuantity] = useState(0);
 
@@ -75,10 +76,6 @@ function ItemCard({ partObject, selected, active, onClickAdd, multipleChoice, qu
     }
   };
 
-  const onSpecsBtnClick = () => {
-    alert("Это кнопочка характеристики");
-  };
-
   return (
 
     <div className="Card">
@@ -118,7 +115,7 @@ function ItemCard({ partObject, selected, active, onClickAdd, multipleChoice, qu
 
         <Button 
           content={<img src={InfoIcon} className='InfoIcon' alt="" />} 
-          callback={() => {onSpecsBtnClick()}} 
+          callback={() => {onSpecsBtnClick(partObject)}} 
           btnName='SpecsButton' 
           btnWidth={80} 
           btnHeight={38} 

@@ -1,53 +1,68 @@
 import './styles/style.SpecsWindow.css';
 import React from 'react';
+import { useEffect } from 'react';
 import CloseIcon from './images/CloseWhite.svg';
-import Cooler from './images/Cooler.jpg';
+import Button from "./Button.tsx";
 import { Part } from './entities/Part';
+import { motion } from 'framer-motion';
 
 interface SpecsWindowProps {
-  partObject?: Part;
-  callback?: (part: Part, addMode: boolean) => void;
+  partObject: Part;
+  addCallback: () => void;
+  closeCallback: () => void;
+  addMode: boolean;
 }
 
-function SpecsWindow({partObject, callback}: SpecsWindowProps) {
+function SpecsWindow({partObject, addCallback, closeCallback, addMode}: SpecsWindowProps) {
+
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      if (event.key === 'Escape') {
+        closeCallback();
+      }
+    };
+    window.addEventListener('keydown', handleKeyPress);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, []);
     
   return (
-    
-    // <div className="Overlay">
-    //     <div className="Window">
-    //         <div className="LeftPane">
-    //             <img src={ partObject.imgAddress } alt={ "Фото " + partObject.id } />
-    //             <div className="windowProductName">{ partObject.modelName }</div>
-    //             <div className="windowAddButton">Добавить</div>
-    //         </div>
-    //         <div className="windowTitle">Характеристики</div>
-    //         <div className="closeButton"></div>
-    //         <div className="description"></div>
-    //     </div>
-    // </div>
 
     <div className="specsWindowOverlay">
-        <div className="window">
+        <motion.div 
+          className="window"
+          animate = {{ opacity: 1, scale: 1 }}
+          initial = {{ opacity: 0.2, scale: 0.85 }} >
             <div className="leftPane">
-                <img className="productImage" src={ Cooler } alt={ "Фото моего члена" } />
+                <img className="productImage" src={ partObject.imgAddress } alt={ 'Фото ' + partObject.modelName } />
                 <div className="productNameHolder">
                   <div className="bean"></div>
-                  <div className="title windowProductName">{ "Intel Core i5-12400F" }</div>
+                  <div className="innerProductNameHolder">
+                    <div className="title windowProductName">{ partObject.modelName }</div>
+                    <div className="title windowPrice"> { partObject.price + '₽' } </div>
+                  </div>
                 </div>
-                <div className="title windowAddButton">Добавить</div>
+                <Button 
+                  content={addMode ? 'Добавить' : 'Убрать'} 
+                  callback={addCallback}
+                  btnName='windowAddButton' 
+                  btnWidth={310} >
+                </Button>
             </div>
             <div className="rightPane">
               <div className="header">
-                <div className="title windowTitle">Характеристики:</div>
-                <div className="closeButton">
-                  <img className="cross" src={ CloseIcon } alt="Закрыть" />
+                <div className="title windowTitle">Описание:</div>
+                <div className="closeButton" onClick={ closeCallback }>
+                  <img className="cross" src={ CloseIcon } alt="Закрыть"/>
                 </div>
               </div>
               <div className="description">
-                {"Из помощников здесь есть: информирование о слепых зонах, помощь в движении задним ходом, камера 360°, а также предупреждение об опасности при открытии дверей. А вот круиз-контроль здесь неадаптивный. Никаких автоматических экстренных торможений и активного удержания в полосе не имеется, но я бы и не сказал, что это какой-то критический момент, по сути это уже больше блажь. Вообще, интерьер выглядит приятно, тот же свежий лаймовый цвет. Да, это не премиум-материалы, но, опять же, это больше к любителям всё жамкать. Но при этом здесь приятная эргономика классического формата и пара любопытных решений как в меню, так и в интерьере, о которых я уже упомянул."}
+                { partObject.description }  
               </div>
             </div>
-        </div>
+        </motion.div>
     </div>
 
   );

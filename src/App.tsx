@@ -4,14 +4,14 @@ import './styles/style.App.css';
 import PartSelection from './PartsSelection.tsx';
 import ItemCard from './ItemCard.tsx';
 import ItemCardHolder from './ItemCardHolder.tsx';
-// import SpecsWindow from './SpecsWindow.tsx'
+import SpecsWindow from './SpecsWindow.tsx'
 import { Computer } from './entities/Computer.ts';
 import { fetchComponents } from "./Fetcher.ts";
 import { Part } from './entities/Part.ts';
 import { PartClassName } from './entities/PartClassName.ts';
 import { Motherboard } from './entities/Motherboard.ts';
 import { Case } from './entities/Case.ts';
-import { predefinedPartSlotList, predefinedModalPromise } from './PredefinedValues.tsx';
+import { predefinedPartSlotList, predefinedModalPromise} from './PredefinedValues.tsx';
 
 export let computer = new Computer();
 
@@ -21,12 +21,23 @@ function App() {
   const [itemCardHolderState, setItemCardHolderState] = useState('showNothing');
   const [itemCardList, setItemcardList] = useState<Array<ReactElement>>([]);
   const [modal, setModal] = useState<ReactElement | undefined>(undefined);
+  const [specsWindow, setSpecsWindow] = useState<ReactElement | undefined>(undefined);
   let areCaseAndBoardDefined = false;
 
   const displayPartSelectionModal = async () => {
     const result = await predefinedModalPromise(setModal);
     setModal(undefined);
     return result;
+  };
+
+  const displaySpecsWindow = (part: Part, addMode: boolean) => {
+    setSpecsWindow(
+    <SpecsWindow
+      partObject={part}
+      addCallback={ () => { onClickItemCard(part, addMode); setTimeout(() => { setSpecsWindow(undefined) }, 80); } }
+      closeCallback={ () => { setSpecsWindow(undefined); } }
+      addMode = { addMode } >
+    </SpecsWindow>);
   };
 
   const displayItemCards = (parts: Array<Part>) => {
@@ -51,7 +62,7 @@ function App() {
         key={1 + part.partClassName.substring(0, 1) + part.id}
         partObject={part}
         onClickAdd={onClickItemCard}
-
+        onSpecsBtnClick={ () => {displaySpecsWindow(part, multipleChoiceFlag ? cardActiveFlag : !cardSelectedFlag)} }
         selected={cardSelectedFlag}
         active={cardActiveFlag}
         multipleChoice={multipleChoiceFlag}
@@ -79,6 +90,7 @@ function App() {
   }
 
   const onClickItemCard = async (part: Part, addMode: boolean) => {
+
     const reply = await fetchComponents(part.partClassName);
     const parts = reply.castTo(part.partClassName);
     if (reply.status) {
@@ -145,6 +157,7 @@ function App() {
 
   return (
     <div className="App">
+      { specsWindow }
       { modal }
       <PartSelection price={totalCost} partSlotList={partSlotList} />
       <ItemCardHolder itemCardList={itemCardList} itemCardHolderState={itemCardHolderState} /> 
