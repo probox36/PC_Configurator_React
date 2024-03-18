@@ -6,12 +6,12 @@ import ItemCard from './ItemCard.tsx';
 import ItemCardHolder from './ItemCardHolder.tsx';
 import SpecsWindow from './SpecsWindow.tsx'
 import { Computer } from './entities/Computer.ts';
-import { fetchComponents } from "./Fetcher.ts";
 import { Part } from './entities/Part.ts';
 import { PartClassName } from './entities/PartClassName.ts';
 import { Motherboard } from './entities/Motherboard.ts';
 import { Case } from './entities/Case.ts';
 import { predefinedPartSlotList, predefinedModalPromise} from './PredefinedValues.tsx';
+import { fetchCompatibleComponents, fetchComponents, ApiResponse } from './Fetcher.ts';
 
 export let computer = new Computer();
 
@@ -40,7 +40,7 @@ function App() {
     </SpecsWindow>);
   };
 
-  const displayItemCards = (parts: Array<Part>) => {
+  const displayItemCards = (parts: Array<Part>) => {    
     const cardList: ReactElement[] = [];
     
     parts.forEach((part) => {
@@ -72,83 +72,104 @@ function App() {
     setItemcardList(cardList);
   };
 
-  const onClickPartSlot = async (partClassName: PartClassName) => {
+  const getCompatibleComponents = async (partClass: PartClassName): Promise<Array<Part>> => {
+    let reply: Promise<ApiResponse>;
     
-    const reply = await fetchComponents(partClassName);
-    const parts = reply.castTo(partClassName);
+    if (areCaseAndBoardDefined) {
+      reply = fetchCompatibleComponents(partClass, computer);
+    } else if (partClass == PartClassName.Motherboard || partClass == PartClassName.Case) {
+
+      if (computer.Case != undefined && partClass == PartClassName.Motherboard) {
+        reply = fetchCompatibleComponents(partClass, computer.Case);
+      } else if (computer.Motherboard != undefined && partClass == PartClassName.Case) {
+        reply = fetchCompatibleComponents(partClass, computer.Motherboard);
+      } else {
+        reply = fetchComponents(partClass);
+      }
+
+    } else {
+      throw new Error("Нельзя запросить список совместимых компонентов если компьютер не инициализирован");
+    }
+
+    if (!(await reply).status) {
+      throw new Error("Нет подключения к серверу");
+    } else {
+      return (await reply).castTo(partClass);
+    }
+  }
+
+  const onClickPartSlot = async (partClass: PartClassName) => {
+    
+    const parts = await getCompatibleComponents(partClass);
     if (parts.length === 0) {
       setItemCardHolderState('showStub');
       return;
     }
-    if (reply.status) {
-      displayItemCards(parts);
-      setItemCardHolderState('showItemCards');
-    } else {
-      alert("Нет подключения к серверу");
-    }
+    displayItemCards(parts);
+    setItemCardHolderState('showItemCards');
 
   }
 
   const onClickItemCard = async (part: Part, addMode: boolean) => {
 
-    const reply = await fetchComponents(part.partClassName);
-    const parts = reply.castTo(part.partClassName);
-    if (reply.status) {
-
-      if (areCaseAndBoardDefined) {
+    const parts = await getCompatibleComponents(part.partClassName);
+    
+    if (areCaseAndBoardDefined) {
         
-        if (part instanceof Motherboard || part instanceof Case) {
-          if (computer.wasSomethingAdded()) {
-            if (!await displayPartSelectionModal()) {
-              return;
-            }
-          }
-          if (addMode) {
-            computer.addPart(part);
-            computer = new Computer(computer.Case, computer.Motherboard);
-          } else {
-            computer.removePart(part);
-            if (part.partClassName == PartClassName.Motherboard) {
-              part = computer.Case;
-            } else {
-              part = computer.Motherboard;
-            }
-            computer = new Computer();
-            computer.addPart(part);
-            areCaseAndBoardDefined = false;
-          }
-        } else {
-          if (addMode) {
-            computer.addPart(part);
-          } else {
-            computer.removePart(part);
+      if (part instanceof Motherboard || part instanceof Case) {
+        if (computer.wasSomethingAdded()) {
+          if (!await displayPartSelectionModal()) {
+            return;
           }
         }
-
-      } else {
-
-        if (part instanceof Motherboard || part instanceof Case) {
-          if (addMode) {
-            computer.addPart(part);
-            if (computer.Case != undefined && computer.Motherboard != undefined) {
-              computer = new Computer(computer.Case, computer.Motherboard);
-              areCaseAndBoardDefined = true;
-            }
-          } else {
-            computer.removePart(part);
-          }
+        if (addMode) {
+          computer.addPart(part);
+          computer = new Computer(computer.Case, computer.Motherboard);
         } else {
-          throw new Error('Нельзя добавлять компоненты в компьютер без корпуса и матплаты');
+          computer.removePart(part);
+          if (part.partClassName == PartClassName.Motherboard) {
+            part = computer.Case;
+          } else {
+            part = computer.Motherboard;
+          }
+          computer = new Computer();
+          computer.addPart(part);
+          areCaseAndBoardDefined = false;
+        }
+      } else {
+        if (addMode) {
+          computer.addPart(part);
+        } else {
+          computer.removePart(part);
         }
       }
 
-      displayItemCards(parts);
-      setTotalCost(computer.calculateTotalCost());
-      setPartSlotList(predefinedPartSlotList(areCaseAndBoardDefined, computer, onClickPartSlot))
-
     } else {
-      alert("Нет подключения к серверу");
+
+      if (part instanceof Motherboard || part instanceof Case) {
+        if (addMode) {
+          computer.addPart(part);
+          if (computer.Case != undefined && computer.Motherboard != undefined) {
+            computer = new Computer(computer.Case, computer.Motherboard);
+            areCaseAndBoardDefined = true;
+          }
+        } else {
+          computer.removePart(part);
+        }
+      } else {
+        throw new Error('Нельзя добавлять компоненты в компьютер без корпуса и матплаты');
+      }
     }
+
+    displayItemCards(parts);
+    setTotalCost(computer.calculateTotalCost());
+    setPartSlotList(predefinedPartSlotList(areCaseAndBoardDefined, computer, onClickPartSlot))
+    if (areCaseAndBoardDefined) { 
+      console.log(computer.toPlainObject());
+      // console.log(fetchCompatibleComponents(PartClassName.CPU, computer));
+      // console.log(fetchCompatibleComponents(PartClassName.CPU, computer.Motherboard)); 
+    }
+
   };
 
   const [partSlotList, setPartSlotList] = useState(

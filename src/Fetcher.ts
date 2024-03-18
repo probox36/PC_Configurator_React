@@ -10,8 +10,9 @@ import { PowerUnit } from "./entities/PowerUnit.ts";
 import { PrimaryStorage } from "./entities/PrimaryStorage.ts";
 import { RAM } from "./entities/RAM.ts";
 import { PartClassName } from "./entities/PartClassName.ts";
+import { Computer } from "./entities/Computer.ts";
 
-class ApiResponse {
+export class ApiResponse {
   status: boolean;
   json: Array<Part>;
 
@@ -69,7 +70,7 @@ export async function fetchComponents(partClassName: PartClassName): Promise<Api
 
   } else {
 
-    let response = await fetch("http://localhost:3001/getCatalog/" + partClassString).catch(
+    let response = await fetch('http://localhost:3001/getCatalog/' + partClassString).catch(
       err => {
         console.log("Tried to fetch " + partClassString + ": " + err.message);
       }
@@ -88,4 +89,46 @@ export async function fetchComponents(partClassName: PartClassName): Promise<Api
   }
 
   return new ApiResponse(status, json);
+}
+
+export async function fetchCompatibleComponents(requiredPartClass: PartClassName, computer: Computer): Promise<ApiResponse>;
+export async function fetchCompatibleComponents(requiredPartClass: PartClassName, part: Part): Promise<ApiResponse>;
+export async function fetchCompatibleComponents(requiredPartClass: PartClassName, computerOrPart: Computer | Part): Promise<ApiResponse> {
+  
+  const queryObject = {
+    requiredPartClass: requiredPartClass.toString(),
+  };
+
+  let endPoint: string;
+
+  console.log(computerOrPart);
+
+  if (computerOrPart instanceof Computer) {
+    console.log('byComputer');
+    queryObject['computer'] = (computerOrPart as Computer).toPlainObject();
+    endPoint = 'http://localhost:3001/getCompatibleComponentsByComputer';
+  } else if (computerOrPart instanceof Part) {
+    console.log('byPart');
+    queryObject['part'] = (computerOrPart as Part).toPlainObject();
+    endPoint = 'http://localhost:3001/getCompatibleComponentsByPart';
+  } else {
+    throw new Error('Не указан компонент/компьютер, для которого ищем совместимые компоненты');
+  }
+
+  console.log(JSON.stringify(queryObject));
+  
+  let response = await fetch(endPoint, {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    body: JSON.stringify(queryObject)
+  });
+
+  let parts: Array<Part> = await response.json();
+  console.log('>>> ');
+  console.log(parts);
+
+  return new ApiResponse(true, parts);
+
 }

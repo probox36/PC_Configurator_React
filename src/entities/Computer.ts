@@ -239,4 +239,15 @@ export class Computer {
         return result;
     }
 
+    public toPlainObject(): Object {
+        if (this.Case != undefined && this.Motherboard != undefined) {
+            return {
+                Case: this.Case.id,
+                Motherboard: this.Motherboard.id
+            };
+        } else {
+            throw new Error("Нельзя конвертировать не до конца инициализированный объект");
+        }
+    }
+
 }

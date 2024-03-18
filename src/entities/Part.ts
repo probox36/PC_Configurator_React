@@ -12,6 +12,13 @@ export class Part {
         return this.partClassName == part.partClassName && this.id == part.id;
     }
 
+    public toPlainObject(): Object {
+        return {
+            partClass: this.partClassName.toString(),
+            partId: this.id
+        };
+    }
+
     constructor(id: number, modelName: string, price: number, description: string, imgAddress: string) {
         this.id = id;
         this.modelName = modelName;
