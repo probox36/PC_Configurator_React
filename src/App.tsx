@@ -13,8 +13,6 @@ import { Case } from './entities/Case.ts';
 import { predefinedPartSlotList, predefinedModalPromise} from './PredefinedValues.tsx';
 import { fetchCompatibleComponents, fetchComponents, ApiResponse } from './Fetcher.ts';
 
-export let computer = new Computer();
-
 function App() {
 
   const [totalCost, setTotalCost] = useState(0);
@@ -22,7 +20,10 @@ function App() {
   const [itemCardList, setItemcardList] = useState<Array<ReactElement>>([]);
   const [modal, setModal] = useState<ReactElement | undefined>(undefined);
   const [specsWindow, setSpecsWindow] = useState<ReactElement | undefined>(undefined);
+  
   let areCaseAndBoardDefined = false;
+  let currentPartList = new Map<PartClassName, Array<Part>>;  
+  let computer = new Computer();
 
   const displayPartSelectionModal = async () => {
     const result = await predefinedModalPromise(setModal);
@@ -100,19 +101,24 @@ function App() {
 
   const onClickPartSlot = async (partClass: PartClassName) => {
     
-    const parts = await getCompatibleComponents(partClass);
-    if (parts.length === 0) {
+    let parts: Array<Part>;
+    if (currentPartList[partClass] == undefined) {
+      currentPartList[partClass] = await getCompatibleComponents(partClass);
+    }
+
+    parts = currentPartList[partClass];
+    if (currentPartList[partClass].length === 0) { 
       setItemCardHolderState('showStub');
       return;
     }
-    displayItemCards(parts);
+    displayItemCards(currentPartList[partClass]);
     setItemCardHolderState('showItemCards');
 
   }
 
   const onClickItemCard = async (part: Part, addMode: boolean) => {
 
-    const parts = await getCompatibleComponents(part.partClassName);
+    const parts = (currentPartList[part.partClassName]);
     
     if (areCaseAndBoardDefined) {
         
@@ -125,6 +131,7 @@ function App() {
         if (addMode) {
           computer.addPart(part);
           computer = new Computer(computer.Case, computer.Motherboard);
+          currentPartList = new Map<PartClassName, Array<Part>>;
         } else {
           computer.removePart(part);
           if (part.partClassName == PartClassName.Motherboard) {
@@ -152,6 +159,7 @@ function App() {
           if (computer.Case != undefined && computer.Motherboard != undefined) {
             computer = new Computer(computer.Case, computer.Motherboard);
             areCaseAndBoardDefined = true;
+            currentPartList = new Map<PartClassName, Array<Part>>;
           }
         } else {
           computer.removePart(part);
@@ -165,9 +173,6 @@ function App() {
     setTotalCost(computer.calculateTotalCost());
     setPartSlotList(predefinedPartSlotList(areCaseAndBoardDefined, computer, onClickPartSlot))
     if (areCaseAndBoardDefined) { 
-      console.log(computer.toPlainObject());
-      // console.log(fetchCompatibleComponents(PartClassName.CPU, computer));
-      // console.log(fetchCompatibleComponents(PartClassName.CPU, computer.Motherboard)); 
     }
 
   };

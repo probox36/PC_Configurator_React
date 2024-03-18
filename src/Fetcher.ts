@@ -57,6 +57,7 @@ export class ApiResponse {
 }
 
 export async function fetchComponents(partClassName: PartClassName): Promise<ApiResponse> {
+  console.log('fetchComponents called');
   
   let partClassString: string = partClassName.toString();
   let status = false;
@@ -95,27 +96,24 @@ export async function fetchCompatibleComponents(requiredPartClass: PartClassName
 export async function fetchCompatibleComponents(requiredPartClass: PartClassName, part: Part): Promise<ApiResponse>;
 export async function fetchCompatibleComponents(requiredPartClass: PartClassName, computerOrPart: Computer | Part): Promise<ApiResponse> {
   
+  console.log('fetchCompatibleComponents called');
   const queryObject = {
     requiredPartClass: requiredPartClass.toString(),
   };
 
   let endPoint: string;
 
-  console.log(computerOrPart);
-
   if (computerOrPart instanceof Computer) {
-    console.log('byComputer');
+
     queryObject['computer'] = (computerOrPart as Computer).toPlainObject();
     endPoint = 'http://localhost:3001/getCompatibleComponentsByComputer';
   } else if (computerOrPart instanceof Part) {
-    console.log('byPart');
+    
     queryObject['part'] = (computerOrPart as Part).toPlainObject();
     endPoint = 'http://localhost:3001/getCompatibleComponentsByPart';
   } else {
     throw new Error('Не указан компонент/компьютер, для которого ищем совместимые компоненты');
   }
-
-  console.log(JSON.stringify(queryObject));
   
   let response = await fetch(endPoint, {
     headers: {
@@ -126,9 +124,6 @@ export async function fetchCompatibleComponents(requiredPartClass: PartClassName
   });
 
   let parts: Array<Part> = await response.json();
-  console.log('>>> ');
-  console.log(parts);
-
   return new ApiResponse(true, parts);
 
 }
