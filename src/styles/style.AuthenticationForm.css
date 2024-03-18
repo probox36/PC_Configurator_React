@@ -1,0 +1,62 @@
+.AuthWindowOverlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+    z-index: 1;
+}
+
+.AuthWindow {
+    position: relative;
+    margin: auto;
+    top: calc(50% - 171px);
+    width: 22%;
+    min-width: 250px;
+    border-radius: 20px;
+    background-color: #282828;
+    border: 2px solid;
+    border-color: #7B7B7B;
+    overflow: hidden;
+    z-index: 2;
+    padding: 35px 40px 50px 40px;
+}
+
+label {
+    margin-left: 5px;
+    color: #B5B5B5;
+    text-align: left;
+    line-height: 50px;
+    text-overflow: ellipsis;
+    user-select: none;
+}
+
+label, input {
+    font-family: 'Raleway';
+    font-weight: 450;
+    font-size: 17px;
+    overflow: hidden;
+}
+
+input {
+    height: 45px;
+    border-radius: 14px;
+    width: 100%;
+    background-color: #3E3E3E;
+    border: 0;
+    color: #FFFFFF;
+    padding: 0px 10px;
+    box-sizing: border-box;
+}
+
+.Cross {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    cursor: pointer;
+    width: 28px;
+    height: 28px;
+}
+
+.AuthButton {
+    margin-top: 30px;
+}

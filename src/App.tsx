@@ -12,6 +12,7 @@ import { Motherboard } from './entities/Motherboard.ts';
 import { Case } from './entities/Case.ts';
 import { predefinedPartSlotList, predefinedModalPromise} from './PredefinedValues.tsx';
 import { fetchCompatibleComponents, fetchComponents, ApiResponse } from './Fetcher.ts';
+import AuthenticationForm from './AuthenticationForm.tsx';
 
 function App() {
 
@@ -183,6 +184,7 @@ function App() {
 
   return (
     <div className="App">
+      <AuthenticationForm></AuthenticationForm>
       { specsWindow }
       { modal }
       <PartSelection price={totalCost} partSlotList={partSlotList} />
